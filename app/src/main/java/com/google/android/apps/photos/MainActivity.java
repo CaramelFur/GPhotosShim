@@ -16,12 +16,18 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 import android.content.Context;
 import android.app.PendingIntent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 
 public class MainActivity extends Activity {
 
   private static final int waitMS = 100;
   private static final int maximumSeconds = 30000;
   private static final int iterations = maximumSeconds * 1000 / waitMS;
+
+  private static final int PERMISSIONS_INT = 755009201;
+
+  private PendingIntent cameraRelaunchIntent;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,20 @@ public class MainActivity extends Activity {
 
     Uri processingURI = (Uri) receivedIntent.getParcelableExtra("processing_uri_intent_extra");
 
-    PendingIntent cameraRelaunchIntent = (PendingIntent) receivedIntent.getParcelableExtra("CAMERA_RELAUNCH_INTENT_EXTRA");
+    this.cameraRelaunchIntent = (PendingIntent) receivedIntent.getParcelableExtra("CAMERA_RELAUNCH_INTENT_EXTRA");
+
+    if (SessionId == null) {
+      finish();
+      return;
+    }
+
+    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+      Log.i("PhotosShim", "No permission, requesting them");
+
+      requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, PERMISSIONS_INT);
+
+      return;
+    }
 
     Log.i("PhotosShim", "SessionId: '" + SessionId + "', URI:'" + uri + "', type: '" + type + "', processingURI: '"
         + processingURI + "'");
@@ -75,12 +94,7 @@ public class MainActivity extends Activity {
     }
 
     if (!success) {
-      try {
-        cameraRelaunchIntent.send();
-      } catch (Exception e) {
-        Log.e("PhotosShim", "Error sending intent", e);
-      }
-      finish();
+      quit();
       return;
     }
 
@@ -90,6 +104,28 @@ public class MainActivity extends Activity {
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     startActivity(intent);
     finish();
+  }
+
+  private void quit() {
+    try {
+      if (this.cameraRelaunchIntent != null)
+        this.cameraRelaunchIntent.send();
+    } catch (Exception e) {
+      Log.e("PhotosShim", "Error sending intent", e);
+    }
+    finish();
+    return;
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    if (requestCode != PERMISSIONS_INT)
+      return;
+    if (permissions.length == 0 || grantResults.length == 0)
+      return;
+
+    if (permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE)
+      quit();
   }
 
   public static String getRealPathFromURI(Context context, Uri contentUri) {
