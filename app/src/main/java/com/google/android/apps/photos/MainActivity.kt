@@ -40,7 +40,7 @@ class MainActivity : Activity() {
             Log.i("PhotosShim", "No READ_EXTERNAL_STORAGE permission, requesting it")
             requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSIONS_INT)
             // We can now quit the app, as GCam wil relaunch it again automatically
-            return quit()
+            return finish()
         }
 
         Log.i(

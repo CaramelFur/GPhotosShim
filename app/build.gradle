@@ -19,8 +19,8 @@ android {
         applicationId 'com.google.android.apps.photos'
         minSdkVersion 29
         targetSdkVersion 31
-        versionCode 4
-        versionName "1.1.1"
+        versionCode 5
+        versionName "1.2.0"
     }
 
     signingConfigs {
@@ -40,6 +40,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
+            minifyEnabled true
             signingConfig signingConfigs.release
         }
     }

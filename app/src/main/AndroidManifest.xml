@@ -24,6 +24,8 @@
             <intent-filter>
                 <action android:name="android.provider.action.REVIEW" />
                 <action android:name="android.provider.action.REVIEW_SECURE" />
+                <action android:name="com.android.camera.action.REVIEW" />
+                <action android:name="com.google.android.apps.photos.action.SECURE_REVIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
