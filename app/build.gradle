@@ -1,31 +1,48 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
 
 android {
-  compileSdkVersion 31
-  buildToolsVersion '31.0.0'
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
-  defaultConfig {
-    applicationId 'com.google.android.apps.photos'
-    minSdkVersion 29
-    targetSdkVersion 31
-    versionCode 2
-    versionName '1.1.0'
-  }
+    compileSdkVersion 31
+    buildToolsVersion '31.0.0'
 
-  /*signingConfigs {
-    release {
-      storeFile file(RELEASE_STORE_FILE)
-      storePassword RELEASE_STORE_PASSWORD
-      keyAlias RELEASE_KEY_ALIAS
-
-      // Optional, specify signing versions used
-      v3SigningEnabled true
+    defaultConfig {
+        applicationId 'com.google.android.apps.photos'
+        minSdkVersion 29
+        targetSdkVersion 31
+        versionCode 4
+        versionName "1.1.1"
     }
-  }
 
-  buildTypes {
-    release {
-      signingConfig signingConfigs.release
+    signingConfigs {
+        release {
+            storeFile file(localProperties["RELEASE_STORE_FILE"])
+            storePassword localProperties["RELEASE_STORE_PASSWORD"]
+            keyAlias localProperties["RELEASE_KEY_ALIAS"]
+            keyPassword localProperties["RELEASE_KEY_PASSWORD"]
+
+            enableV3Signing = true
+            enableV4Signing = true
+        }
     }
-  }*/
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
+
 }

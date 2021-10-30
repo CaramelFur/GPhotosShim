@@ -1,16 +1,13 @@
-package com.google.android.apps.photos.cameraassistant;
+package com.google.android.apps.photos.cameraassistant
 
-import android.app.Service;
-import android.content.Intent;
-import android.util.Log;
-import android.os.IBinder;
-import android.content.res.Configuration;
+import android.app.Service
+import android.content.Intent
+import android.os.IBinder
+import android.util.Log
 
-public class CameraAssistantService extends Service {
-  @Override
-  public IBinder onBind(Intent intent) {
-    Log.i("DEBUGCAM", "BOUND: " + intent + " with " + intent.getFlags());
-
-    return null;
-  }
+class CameraAssistantService : Service() {
+    override fun onBind(intent: Intent): IBinder? {
+        Log.i("DEBUGCAM", "BOUND: " + intent + " with " + intent.flags)
+        return null
+    }
 }
