@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.google.android.apps.photos">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAHRD" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
     <!-- This is here to make sure GPhotosShim has access to the gcam application -->
     <queries>
